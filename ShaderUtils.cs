@@ -62,11 +62,11 @@ namespace UnityEngine
             return properties.ToArray();
         }
 
-        public static MaterialProperty GetMaterialPropertyFromID(this Material mat, int nameid)
+        public static MaterialProperty GetMaterialPropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                     return prop;
             }
             return null;
@@ -105,16 +105,16 @@ namespace UnityEngine
             return colors.ToArray();
         }
 
-        public static ColorProperty GetColorPropertyFromID(this Material mat, int nameid)
+        public static ColorProperty GetColorPropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                 {
                     if (prop is ColorProperty colorProperty)
                         return colorProperty;
                     else
-                        throw new System.Exception($"id {nameid} is not a color property!");
+                        throw new System.Exception($"id {nameID} is not a color property!");
                 }
             }
             return null;
@@ -163,16 +163,16 @@ namespace UnityEngine
             return textures.ToArray();
         }
 
-        public static TextureProperty GetTexturePropertyFromID(this Material mat, int nameid)
+        public static TextureProperty GetTexturePropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                 {
                     if (prop is TextureProperty textureProperty)
                         return textureProperty;
                     else
-                        throw new System.Exception($"id {nameid} is not a texture property!");
+                        throw new System.Exception($"id {nameID} is not a texture property!");
                 }
             }
             return null;
@@ -221,16 +221,16 @@ namespace UnityEngine
             return floats.ToArray();
         }
 
-        public static FloatProperty GetFloatPropertyFromID(this Material mat, int nameid)
+        public static FloatProperty GetFloatPropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                 {
                     if (prop is FloatProperty floatProperty)
                         return floatProperty;
                     else
-                        throw new System.Exception($"id {nameid} is not a float property!");
+                        throw new System.Exception($"id {nameID} is not a float property!");
                 }
             }
             return null;
@@ -279,16 +279,16 @@ namespace UnityEngine
             return ranges.ToArray();
         }
 
-        public static RangeProperty GetRangePropertyFromID(this Material mat, int nameid)
+        public static RangeProperty GetRangePropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                 {
                     if (prop is RangeProperty rangeProperty)
                         return rangeProperty;
                     else
-                        throw new System.Exception($"id {nameid} is not a range property!");
+                        throw new System.Exception($"id {nameID} is not a range property!");
                 }
             }
             return null;
@@ -337,16 +337,16 @@ namespace UnityEngine
             return vectors.ToArray();
         }
 
-        public static VectorProperty GetVectorPropertyFromID(this Material mat, int nameid)
+        public static VectorProperty GetVectorPropertyFromNameId(this Material mat, int nameID)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (prop.NameID == nameid)
+                if (prop.NameID == nameID)
                 {
                     if (prop is VectorProperty vectorProperty)
                         return vectorProperty;
                     else
-                        throw new System.Exception($"id {nameid} is not a vector property!");
+                        throw new System.Exception($"id {nameID} is not a vector property!");
                 }
             }
             return null;
@@ -400,6 +400,16 @@ namespace UnityEngine
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
                 if (prop.Index == index)
+                    return prop.Name;
+            }
+            return string.Empty;
+        }
+
+        public static string GetPropertyNameFromId(this Material mat, int nameID)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.NameID == nameID)
                     return prop.Name;
             }
             return string.Empty;
