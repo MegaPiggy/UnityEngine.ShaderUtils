@@ -27,6 +27,23 @@ namespace UnityEngine
             }
         }
 
+        public static Texture2D GetPropertyTextureDefaultValue(this Shader sha, int index)
+        {
+            switch (sha.GetPropertyTextureDefaultName(index))
+            {
+                case "black":
+                    return Texture2D.blackTexture;
+                case "white":
+                    return Texture2D.whiteTexture;
+                case "red":
+                    return Texture2D.redTexture;
+                case "bump":
+                    return ShaderUtils.bumpTexture;
+                default:
+                    return Texture2D.grayTexture;
+            }
+        }
+
         public static MaterialProperty[] GetShaderProperties(this Shader sha) => new Material(sha).GetMaterialProperties();
 
         public static MaterialProperty[] GetMaterialProperties(this Material mat)
@@ -169,7 +186,7 @@ namespace UnityEngine
                     if (prop is ColorProperty colorProperty)
                         return colorProperty;
                     else
-                        throw new System.Exception($"\"{name}\" is not a color property!");
+                        throw new System.Exception($"\"{description}\" is not a color property!");
                 }
             }
             return null;

@@ -17,6 +17,7 @@ namespace UnityEngine
         public int NameID => sha.GetPropertyNameId(index);
         public string Description => sha.GetPropertyDescription(index);
         public string[] Attributes => sha.GetPropertyAttributes(index);
+
         public object Value
         {
             get
@@ -28,16 +29,36 @@ namespace UnityEngine
                     case ShaderPropertyType.Vector:
                         return mat.GetVector(Name);
                     case ShaderPropertyType.Float:
-                        return mat.GetFloat(Name);
                     case ShaderPropertyType.Range:
                         return mat.GetFloat(Name);
                     case ShaderPropertyType.Texture:
                         return mat.GetTexture(Name);
                     default:
-                        return null;
+                        throw new NotSupportedException($"Getting value for type {Type} is not supported!");
                 }
             }
         }
+
+        public object DefaultValue
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case ShaderPropertyType.Color:
+                    case ShaderPropertyType.Vector:
+                        return sha.GetPropertyDefaultVectorValue(Index);
+                    case ShaderPropertyType.Float:
+                    case ShaderPropertyType.Range:
+                        return sha.GetPropertyDefaultFloatValue(Index);
+                    case ShaderPropertyType.Texture:
+                        return sha.GetPropertyTextureDefaultValue(Index);
+                    default:
+                        throw new NotSupportedException($"Getting default value for type {Type} is not supported!");
+                }
+            }
+        }
+
         public ShaderPropertyType Type => sha.GetPropertyType(index);
         public ShaderPropertyFlags Flags => sha.GetPropertyFlags(index);
 
@@ -49,11 +70,17 @@ namespace UnityEngine
         }
     }
 
-    public class ColorProperty : MaterialProperty
+    public class ColorProperty : VectorProperty
     {
-        public Color DefaultValue => sha.GetPropertyDefaultVectorValue(index);
+        public new Color Value
+        {
+            get => mat.GetColor(Name);
+            set => mat.SetColor(Name, value);
+        }
 
-        public Color GetValue() => mat.GetColor(Name);
+        public new Color DefaultValue => sha.GetPropertyDefaultVectorValue(index);
+
+        public new Color GetValue() => mat.GetColor(Name);
         public void SetValue(Color val) => mat.SetColor(Name, val);
 
         public ColorProperty(int index, Material mat) : base(index, mat)
@@ -65,8 +92,14 @@ namespace UnityEngine
 
     public class TextureProperty : MaterialProperty
     {
+        public new Texture Value
+        {
+            get => mat.GetTexture(Name);
+            set => mat.SetTexture(Name, value);
+        }
+
         public string DefaultName => sha.GetPropertyTextureDefaultName(index);
-        public Texture2D DefaultValue
+        public new Texture2D DefaultValue
         {
             get
             {
@@ -85,6 +118,7 @@ namespace UnityEngine
                 }
             }
         }
+
         public TextureDimension Dimension => sha.GetPropertyTextureDimension(index);
         public Vector2 Offset => mat.GetTextureOffset(Name);
         public Vector2 Scale => mat.GetTextureScale(index);
@@ -101,39 +135,47 @@ namespace UnityEngine
 
     public class VectorProperty : MaterialProperty
     {
-        public Vector4 DefaultValue => sha.GetPropertyDefaultVectorValue(index);
+        public new Vector4 Value
+        {
+            get => mat.GetVector(Name);
+            set => mat.SetVector(Name, value);
+        }
+
+        public new Vector4 DefaultValue => sha.GetPropertyDefaultVectorValue(index);
 
         public Vector4 GetValue() => mat.GetVector(Name);
         public void SetValue(Vector4 val) => mat.SetVector(Name, val);
 
         public VectorProperty(int index, Material mat) : base(index, mat)
         {
-            if (Type != ShaderPropertyType.Vector)
+            if (Type != ShaderPropertyType.Vector && Type != ShaderPropertyType.Color)
                 throw new NotSupportedException("property must be a vector");
         }
     }
 
     public class FloatProperty : MaterialProperty
     {
-        public float DefaultValue => sha.GetPropertyDefaultFloatValue(index);
+        public new float Value
+        {
+            get => mat.GetFloat(Name);
+            set => mat.SetFloat(Name, value);
+        }
+
+        public new float DefaultValue => sha.GetPropertyDefaultFloatValue(index);
 
         public float GetValue() => mat.GetFloat(Name);
         public void SetValue(float val) => mat.SetFloat(Name, val);
 
         public FloatProperty(int index, Material mat) : base(index, mat)
         {
-            if (Type != ShaderPropertyType.Float)
+            if (Type != ShaderPropertyType.Float && Type != ShaderPropertyType.Range)
                 throw new NotSupportedException("property must be a float");
         }
     }
 
-    public class RangeProperty : MaterialProperty
+    public class RangeProperty : FloatProperty
     {
-        public float DefaultValue => sha.GetPropertyDefaultFloatValue(index);
         public Vector2 RangeLimits => sha.GetPropertyRangeLimits(index);
-
-        public float GetValue() => mat.GetFloat(Name);
-        public void SetValue(float val) => mat.SetFloat(Name, val);
 
         public RangeProperty(int index, Material mat) : base(index, mat)
         {
