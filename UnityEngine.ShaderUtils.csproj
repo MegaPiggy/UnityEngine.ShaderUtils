@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net48</TargetFramework>
+	<LangVersion>latest</LangVersion>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	<DebugType>portable</DebugType>
+	<OutputPath>./bin</OutputPath>
+	<AssemblyVersion>0.0.0.0</AssemblyVersion>
+	<Deterministic>False</Deterministic>
+	<UnityVersion></UnityVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="UnityEngine.ShaderUtils.csproj.user" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="UnityEngine.Modules" Version="$(UnityVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
