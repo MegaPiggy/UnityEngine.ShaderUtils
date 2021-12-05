@@ -92,6 +92,16 @@ namespace UnityEngine
             return null;
         }
 
+        public static MaterialProperty GetMaterialPropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                    return prop;
+            }
+            return null;
+        }
+
         public static ColorProperty[] GetColorProperties(this Shader sha) => new Material(sha).GetColorProperties();
 
         public static ColorProperty[] GetColorProperties(this Material mat)
@@ -140,6 +150,21 @@ namespace UnityEngine
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
                 if (prop.Name == name)
+                {
+                    if (prop is ColorProperty colorProperty)
+                        return colorProperty;
+                    else
+                        throw new System.Exception($"\"{name}\" is not a color property!");
+                }
+            }
+            return null;
+        }
+
+        public static ColorProperty GetColorPropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
                 {
                     if (prop is ColorProperty colorProperty)
                         return colorProperty;
@@ -208,6 +233,21 @@ namespace UnityEngine
             return null;
         }
 
+        public static TextureProperty GetTexturePropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                {
+                    if (prop is TextureProperty textureProperty)
+                        return textureProperty;
+                    else
+                        throw new System.Exception($"\"{description}\" is not a texture property!");
+                }
+            }
+            return null;
+        }
+
         public static FloatProperty[] GetFloatProperties(this Shader sha) => new Material(sha).GetFloatProperties();
 
         public static FloatProperty[] GetFloatProperties(this Material mat)
@@ -261,6 +301,21 @@ namespace UnityEngine
                         return floatProperty;
                     else
                         throw new System.Exception($"\"{name}\" is not a float property!");
+                }
+            }
+            return null;
+        }
+
+        public static FloatProperty GetFloatPropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                {
+                    if (prop is FloatProperty floatProperty)
+                        return floatProperty;
+                    else
+                        throw new System.Exception($"\"{description}\" is not a float property!");
                 }
             }
             return null;
@@ -324,6 +379,21 @@ namespace UnityEngine
             return null;
         }
 
+        public static RangeProperty GetRangePropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                {
+                    if (prop is RangeProperty rangeProperty)
+                        return rangeProperty;
+                    else
+                        throw new System.Exception($"\"{description}\" is not a range property!");
+                }
+            }
+            return null;
+        }
+
         public static VectorProperty[] GetVectorProperties(this Shader sha) => new Material(sha).GetVectorProperties();
 
         public static VectorProperty[] GetVectorProperties(this Material mat)
@@ -382,6 +452,21 @@ namespace UnityEngine
             return null;
         }
 
+        public static VectorProperty GetVectorPropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                {
+                    if (prop is VectorProperty vectorProperty)
+                        return vectorProperty;
+                    else
+                        throw new System.Exception($"\"{description}\" is not a vector property!");
+                }
+            }
+            return null;
+        }
+
         public static MaterialProperty[] GetUnknownProperties(this Shader sha) => new Material(sha).GetUnknownProperties();
 
         public static MaterialProperty[] GetUnknownProperties(this Material mat)
@@ -415,11 +500,31 @@ namespace UnityEngine
             return string.Empty;
         }
 
+        public static string GetPropertyNameFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                    return prop.Name;
+            }
+            return string.Empty;
+        }
+
         public static int GetPropertyNameId(this Material mat, string name)
         {
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
                 if (prop.Name == name)
+                    return prop.NameID;
+            }
+            return -1;
+        }
+
+        public static int GetPropertyNameIdFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
                     return prop.NameID;
             }
             return -1;
