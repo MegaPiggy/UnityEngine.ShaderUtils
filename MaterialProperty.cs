@@ -103,25 +103,7 @@ namespace UnityEngine
         }
 
         public string DefaultName => sha.GetPropertyTextureDefaultName(index);
-        public new Texture2D DefaultValue
-        {
-            get
-            {
-                switch (DefaultName)
-                {
-                    case "black":
-                        return Texture2D.blackTexture;
-                    case "white":
-                        return Texture2D.whiteTexture;
-                    case "red":
-                        return Texture2D.redTexture;
-                    case "bump":
-                        return ShaderUtils.bumpTexture;
-                    default:
-                        return Texture2D.grayTexture;
-                }
-            }
-        }
+        public new Texture2D DefaultValue => sha.GetPropertyTextureDefaultValue(index);
 
         public TextureDimension Dimension => sha.GetPropertyTextureDimension(index);
         public Vector2 Offset => mat.GetTextureOffset(Name);
