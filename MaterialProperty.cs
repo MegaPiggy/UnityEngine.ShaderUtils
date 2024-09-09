@@ -33,6 +33,8 @@ namespace UnityEngine
                         return mat.GetFloat(Name);
                     case ShaderPropertyType.Texture:
                         return mat.GetTexture(Name);
+                    case ShaderPropertyType.Int:
+                        return mat.GetInteger(Name);
                     default:
                         throw new NotSupportedException($"Getting value for type {Type} is not supported!");
                 }
@@ -53,6 +55,8 @@ namespace UnityEngine
                         return sha.GetPropertyDefaultFloatValue(Index);
                     case ShaderPropertyType.Texture:
                         return sha.GetPropertyTextureDefaultValue(Index);
+                    case ShaderPropertyType.Int:
+                        return sha.GetPropertyDefaultIntegerValue(Index);
                     default:
                         throw new NotSupportedException($"Getting default value for type {Type} is not supported!");
                 }
@@ -181,6 +185,26 @@ namespace UnityEngine
         {
             if (Type != ShaderPropertyType.Range)
                 throw new NotSupportedException("property must be a range");
+        }
+    }
+
+    public class IntegerProperty : MaterialProperty
+    {
+        public new int Value
+        {
+            get => mat.GetInteger(Name);
+            set => mat.SetInteger(Name, value);
+        }
+
+        public new int DefaultValue => sha.GetPropertyDefaultIntegerValue(index);
+
+        public float GetValue() => mat.GetInteger(Name);
+        public void SetValue(int val) => mat.SetInteger(Name, val);
+
+        public IntegerProperty(int index, Material mat) : base(index, mat)
+        {
+            if (Type != ShaderPropertyType.Int)
+                throw new NotSupportedException("property must be a integer");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<Project>
   <PropertyGroup>
-    <UnityVersion>2019.4.29</UnityVersion>
+    <UnityVersion>2021.1.0</UnityVersion>
   </PropertyGroup>
 </Project>

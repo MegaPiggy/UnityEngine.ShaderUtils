@@ -44,6 +44,14 @@ namespace UnityEngine
             }
         }
 
+        public static int GetPropertyDefaultIntegerValue(this Shader sha, int index)
+        {
+            Shader.CheckPropertyIndex(sha, index);
+            if (sha.GetPropertyType(index) != ShaderPropertyType.Int)
+                throw new System.ArgumentException("Property type is not Int.");
+            return Shader.GetPropertyDefaultIntValue(sha, index);
+        }
+
         public static MaterialProperty[] GetShaderProperties(this Shader sha) => new Material(sha).GetMaterialProperties();
 
         public static MaterialProperty[] GetMaterialProperties(this Material mat)
@@ -70,6 +78,9 @@ namespace UnityEngine
                         break;
                     case ShaderPropertyType.Texture:
                         properties.Add(new TextureProperty(i, mat));
+                        break;
+                    case ShaderPropertyType.Int:
+                        properties.Add(new IntegerProperty(i, mat));
                         break;
                     default:
                         properties.Add(new MaterialProperty(i, mat));
@@ -484,6 +495,79 @@ namespace UnityEngine
             return null;
         }
 
+        public static IntegerProperty[] GetIntegerProperties(this Shader sha) => new Material(sha).GetIntegerProperties();
+
+        public static IntegerProperty[] GetIntegerProperties(this Material mat)
+        {
+            List<IntegerProperty> integers = new List<IntegerProperty>();
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop is IntegerProperty integerProperty)
+                    integers.Add(integerProperty);
+            }
+            return integers.ToArray();
+        }
+
+        public static IntegerProperty GetIntegerPropertyFromNameId(this Material mat, int nameID)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.NameID == nameID)
+                {
+                    if (prop is IntegerProperty integerProperty)
+                        return integerProperty;
+                    else
+                        throw new System.Exception($"id {nameID} is not a integer property!");
+                }
+            }
+            return null;
+        }
+
+        public static IntegerProperty GetIntegerProperty(this Material mat, int index)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Index == index)
+                {
+                    if (prop is IntegerProperty integerProperty)
+                        return integerProperty;
+                    else
+                        throw new System.Exception($"property at index #{index} is not a integer!");
+                }
+            }
+            return null;
+        }
+
+        public static IntegerProperty GetIntegerProperty(this Material mat, string name)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Name == name)
+                {
+                    if (prop is IntegerProperty integerProperty)
+                        return integerProperty;
+                    else
+                        throw new System.Exception($"\"{name}\" is not a integer property!");
+                }
+            }
+            return null;
+        }
+
+        public static IntegerProperty GetIntegerPropertyFromDescription(this Material mat, string description)
+        {
+            foreach (MaterialProperty prop in mat.GetMaterialProperties())
+            {
+                if (prop.Description == description)
+                {
+                    if (prop is IntegerProperty integerProperty)
+                        return integerProperty;
+                    else
+                        throw new System.Exception($"\"{description}\" is not a integer property!");
+                }
+            }
+            return null;
+        }
+
         public static MaterialProperty[] GetUnknownProperties(this Shader sha) => new Material(sha).GetUnknownProperties();
 
         public static MaterialProperty[] GetUnknownProperties(this Material mat)
@@ -491,7 +575,7 @@ namespace UnityEngine
             List<MaterialProperty> unknown = new List<MaterialProperty>();
             foreach (MaterialProperty prop in mat.GetMaterialProperties())
             {
-                if (!((prop is ColorProperty) || (prop is TextureProperty) || (prop is FloatProperty) || (prop is RangeProperty) || (prop is VectorProperty)))
+                if (!((prop is ColorProperty) || (prop is TextureProperty) || (prop is FloatProperty) || (prop is RangeProperty) || (prop is VectorProperty) || (prop is IntegerProperty)))
                     unknown.Add(prop);
             }
             return unknown.ToArray();
@@ -603,6 +687,8 @@ namespace UnityEngine
                         return rangeProperty.DefaultValue;
                     else if (prop is VectorProperty vectorProperty)
                         return vectorProperty.DefaultValue;
+                    else if (prop is IntegerProperty integerProperty)
+                        return integerProperty.DefaultValue;
                 }
             }
             return null;
