@@ -44,13 +44,7 @@ namespace UnityEngine
             }
         }
 
-        public static int GetPropertyDefaultIntegerValue(this Shader sha, int index)
-        {
-            Shader.CheckPropertyIndex(sha, index);
-            if (sha.GetPropertyType(index) != ShaderPropertyType.Int)
-                throw new System.ArgumentException("Property type is not Int.");
-            return Shader.GetPropertyDefaultIntValue(sha, index);
-        }
+        public static int GetPropertyDefaultIntegerValue(this Shader sha, int index) => sha.GetPropertyDefaultIntValue(index);
 
         public static MaterialProperty[] GetShaderProperties(this Shader sha) => new Material(sha).GetMaterialProperties();
 
